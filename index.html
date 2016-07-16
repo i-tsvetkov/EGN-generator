@@ -1,11 +1,11 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>ЕГН</title>
+    <title>ЕГН Генератор</title>
     <link rel="stylesheet" href="pure-min.css">
     <style>
       body {
-        height: 100vh;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -20,8 +20,16 @@
   <center>
   <form class="pure-form">
     <input id="egn" type="text" placeholder="ЕГН" autofocus>
+    <select id="gender">
+      <option value="?">пол</option>
+      <option value="M">мъж</option>
+      <option value="F">жена</option>
+    </select>
     <button type="button" id="btn" class="pure-button pure-button-primary">start!</button>
-    <table id="egns"></table>
+    <table id="egns" class="pure-table">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
   </form>
   </center>
   </body>
