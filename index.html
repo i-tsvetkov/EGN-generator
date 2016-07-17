@@ -19,13 +19,45 @@
   <script src="checker.js"></script>
   <center>
   <form class="pure-form">
-    <input id="egn" type="text" placeholder="ЕГН" autofocus>
+    <input id="egn" type="text" maxlength="10" pattern="[0-9?]*" placeholder="ЕГН" autofocus>
     <select id="gender">
-      <option value="?">пол</option>
-      <option value="M">мъж</option>
-      <option value="F">жена</option>
+      <option value="?">Пол</option>
+      <option value="M">Мъж</option>
+      <option value="F">Жена</option>
     </select>
-    <button type="button" id="btn" class="pure-button pure-button-primary">start!</button>
+    <select id="region">
+      <option value="?">Област</option>
+      <option value="Благоевград">Благоевград</option>
+      <option value="Бургас">Бургас</option>
+      <option value="Варна">Варна</option>
+      <option value="Велико Търново">Велико Търново</option>
+      <option value="Видин">Видин</option>
+      <option value="Враца">Враца</option>
+      <option value="Габрово">Габрово</option>
+      <option value="Добрич (Толбухин)">Добрич (Толбухин)</option>
+      <option value="Кърджали">Кърджали</option>
+      <option value="Кюстендил">Кюстендил</option>
+      <option value="Ловеч">Ловеч</option>
+      <option value="Монтана">Монтана</option>
+      <option value="Пазарджик">Пазарджик</option>
+      <option value="Перник">Перник</option>
+      <option value="Плевен">Плевен</option>
+      <option value="Пловдив">Пловдив</option>
+      <option value="Разград">Разград</option>
+      <option value="Русе">Русе</option>
+      <option value="Силистра">Силистра</option>
+      <option value="Сливен">Сливен</option>
+      <option value="Смолян">Смолян</option>
+      <option value="София - град">София - град</option>
+      <option value="София - окръг">София - окръг</option>
+      <option value="Стара Загора">Стара Загора</option>
+      <option value="Търговище">Търговище</option>
+      <option value="Хасково">Хасково</option>
+      <option value="Шумен">Шумен</option>
+      <option value="Ямбол">Ямбол</option>
+      <option value="Друг/Неизвестен">Друг/Неизвестен</option>
+    </select>
+    <button type="button" id="btn" class="pure-button pure-button-primary">Намери!</button>
     <table id="egns" class="pure-table">
       <thead></thead>
       <tbody></tbody>
