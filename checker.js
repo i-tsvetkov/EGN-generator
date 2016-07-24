@@ -57,15 +57,10 @@
 
   var parseEgn = (egn) => egn.split('').map(n => Number(n));
 
-  var egnOk = (egn) => ((egn[0] * 2  +
-                         egn[1] * 4  +
-                         egn[2] * 8  +
-                         egn[3] * 5  +
-                         egn[4] * 10 +
-                         egn[5] * 9  +
-                         egn[6] * 7  +
-                         egn[7] * 3  +
-                         egn[8] * 6) % 11 % 10) === egn[9];
+  var egnOk = (egn) => (_.reduce(
+                        _.range(9)
+                          .map(i => egn[i] * (Math.pow(2, i + 1) % 11)),
+                        (sum, n) => sum + n) % 11 % 10) === egn[9];
 
   var genderOk = (gender) => (egn) => (gender === "M") ? egn[8] % 2 === 0
                                     : (gender === "F") ? egn[8] % 2 !== 0
