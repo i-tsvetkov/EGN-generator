@@ -141,6 +141,15 @@
     tbl = document.getElementById("egns");
 
     btn.onclick = () => {
+      egn.setCustomValidity("");
+
+      if (!egn.checkValidity()) {
+        egn.setCustomValidity("Моля въведете само цифри или въпросителни знаци"
+                            + " (за неизвестни цифри)");
+        egn.reportValidity();
+        return;
+      }
+
       tbl.tBodies[0].textContent = tbl.tHead.textContent = '';
 
       if (_.contains(egn.value, '?'))
