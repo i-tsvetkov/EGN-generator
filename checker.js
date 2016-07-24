@@ -83,10 +83,17 @@
       return (egn) => true;
   };
 
-  var fixDate = (egn) =>
-    (egn[2] > 3) ? _.take(egn, 2).concat([egn[2] - 4]).concat(_.drop(egn, 3)) :
-    (egn[2] > 1) ? _.take(egn, 2).concat([egn[2] - 2]).concat(_.drop(egn, 3))
-    : egn;
+  var dateOk = (egn) => {
+    var y = 10 * egn[0] + egn[1],
+        m = 10 * egn[2] + egn[3],
+        d = 10 * egn[4] + egn[5];
+    y += (egn[2] > 3) ? 2000 : (egn[2] > 1) ? 1800 : 1900;
+    m -= (egn[2] > 3) ?   40 : (egn[2] > 1) ?   20 :    0;
+    var date = moment([y, m - 1, d]);
+    return date.isValid()
+        && date.isBefore()
+        && date.isAfter(moment().subtract(130, 'y'));
+  };
 
   var fillPos = (arr, item, n) => _.take(arr, n)
                                   .concat([item])
@@ -105,7 +112,7 @@
     egns
     .filter(genderOk(getGender()))
     .filter(egnOk)
-    .filter(e => moment(_.take(fixDate(e), 6).join(''), 'YYMMDD').isValid())
+    .filter(dateOk)
     .filter(regionOk(getRegion()));
 
   var findEgns = (egn) =>
