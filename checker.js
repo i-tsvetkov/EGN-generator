@@ -111,23 +111,25 @@
     .filter(regionOk(getRegion()));
 
   var findEgns = (egn) =>
-    filterEgns(
+    _.uniq(filterEgns(
       _.flatten(cartesian(digits, 10 - egn.length)
         .map(nums => combinations(digits, 10 - egn.length)
           .map(ps => fillAllPos(egn, nums, ps))),
-      true));
+      true)), false, x => x.toString());
 
   var findEgnsWithPattern = (egn) => {
     var ps  = _.filter(_.range(egn.length), i => egn[i] === '?');
     var egn = _.filter(egn, i => i !== '?').map(n => Number(n));
     if (egn.length + ps.length === 10)
-      return filterEgns(cartesian(digits, ps.length)
-              .map(nums => fillAllPos(egn, nums, ps)));
+      return _.uniq(filterEgns(cartesian(digits, ps.length)
+              .map(nums => fillAllPos(egn, nums, ps)))
+              , false, x => x.toString());
     else
-      return _.flatten(cartesian(digits, ps.length)
+      return _.uniq(_.flatten(cartesian(digits, ps.length)
               .map(nums => fillAllPos(egn, nums, ps))
               .map(findEgns)
-              , true);
+              , true)
+              , false, x => x.toString());
   };
 
   var showResults = (rs) =>
