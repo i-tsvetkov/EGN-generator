@@ -50,3 +50,8 @@ fixWrongDigits = (digits, n) ->
         changeDigits(ps, ns, digits)
   .reduce (acc, arr) -> acc.concat arr
 
+tooManyDigits = (digits) ->
+  combinations([0...digits.length], digits.length - 10).map (ps) ->
+    [0...digits.length].filter (i) -> not (i in ps)
+    .map (i) -> digits[i]
+
