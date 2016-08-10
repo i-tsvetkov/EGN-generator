@@ -34,6 +34,16 @@ combinations = (xs, n) ->
     [head].concat c
   .concat combinations(tail, n)
 
+combinationsWithRepetitions = (xs, n) ->
+  return [[]] if n == 0
+  return  []  if xs.length == 0
+
+  [head, tail] = [xs[0], xs.slice(1)]
+
+  combinations(xs, n - 1).map (c) ->
+    [head].concat c
+  .concat combinationsWithRepetitions(tail, n)
+
 fixWrongDigits = (n) -> (digits) ->
   digits = parseEgn digits
   changeDigit = (p, n, xs) -> xs[0...p].concat([n]).concat xs[p + 1..]
@@ -57,4 +67,7 @@ tooManyDigits = (digits) ->
   combinations([0...digits.length], digits.length - 10).map (ps) ->
     [0...digits.length].filter (i) -> not (i in ps)
     .map (i) -> digits[i]
+
+egnPermutations = (digits) ->
+  permutations(parseEgn(digits))
 
