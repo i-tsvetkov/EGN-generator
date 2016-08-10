@@ -1,4 +1,3 @@
-(function () {
   var btn, egn, tbl;
   var digits = _.range(10);
   var regions = {
@@ -167,4 +166,4 @@
                                                         + ' ЕГН-та';
     };
   };
-})();
+
