@@ -123,12 +123,14 @@
       return _.uniq(filterEgns(cartesian(digits, ps.length)
               .map(nums => fillAllPos(egn, nums, ps)))
               , false, x => x.toString());
-    else
+    else if (egn.length + ps.length <= 10)
       return _.uniq(_.flatten(cartesian(digits, ps.length)
               .map(nums => fillAllPos(egn, nums, ps))
               .map(findEgns)
               , true)
               , false, x => x.toString());
+    else
+      return [];
   };
 
   var showResults = (rs) =>

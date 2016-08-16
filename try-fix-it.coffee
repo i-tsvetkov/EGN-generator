@@ -9,7 +9,7 @@ remove = (item, arr) ->
   copy
 
 Array::flatMap = (f) ->
-  @.map(f).reduce (acc, arr) -> acc.concat arr
+  @.map(f).reduce(((acc, arr) -> acc.concat(arr)), [])
 
 Array::unique = ->
   output = {}

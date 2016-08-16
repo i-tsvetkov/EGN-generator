@@ -66,6 +66,9 @@ parseRange = function(range) {
 
 getPatternsFromRangeModel = function(model) {
   var groups;
+  if (model.replace(/\[\d+-(\d+)\]/g, "$1").length > 10) {
+    return [];
+  }
   groups = model.match(/[\d\?]+|\[\d+-\d+\]/g).map(function(g) {
     if (g.match(/\[\d+-\d+\]/)) {
       return parseRange(g);
@@ -82,6 +85,9 @@ starPattern = function(pattern) {
   var fst, gs, j, l, lst, ref;
   pattern = pattern.replace(/\*{2,}/g, '*');
   l = 10 - pattern.replace(/\*/g, '').replace(/\[\d+-(\d+)\]/g, "$1").length;
+  if (l <= 0) {
+    return [];
+  }
   ref = pattern.split('*'), fst = ref[0], gs = 3 <= ref.length ? slice.call(ref, 1, j = ref.length - 1) : (j = 1, []), lst = ref[j++];
   return cartesian([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], l).flatMap(function(xs) {
     var k, results;
@@ -117,9 +123,9 @@ remove = function(item, arr) {
 };
 
 Array.prototype.flatMap = function(f) {
-  return this.map(f).reduce(function(acc, arr) {
+  return this.map(f).reduce((function(acc, arr) {
     return acc.concat(arr);
-  });
+  }), []);
 };
 
 Array.prototype.unique = function() {

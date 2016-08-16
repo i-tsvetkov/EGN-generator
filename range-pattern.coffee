@@ -18,6 +18,7 @@ parseRange = (range) ->
     '0'.repeat(len - str.length) + str
 
 getPatternsFromRangeModel = (model) ->
+  return [] if model.replace(/\[\d+-(\d+)\]/g, "$1").length > 10
   groups = model.match(/[\d\?]+|\[\d+-\d+\]/g).map (g) ->
     if g.match /\[\d+-\d+\]/
       parseRange g
