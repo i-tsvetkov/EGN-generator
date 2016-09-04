@@ -18,17 +18,26 @@ getEgnsFromModel = (model) ->
 tryFixIt = (egn, genFunc) ->
   filterEgns(genFunc(egn)).unique()
 
-getRandomNumbers = ->
-  [1..10].map -> parseInt(Math.random() * 10)
+getRandomNumbers = (n = 10) ->
+  [1..n].map -> parseInt(Math.random() * 10)
 
-getRandomEgn = ->
+getRandomEgn = (pattern = '') ->
   _genderOk = genderOk(getGender())
   _regionOk = regionOk(getRegion())
   ok = (e) -> _genderOk(e)    \
               and egnOk(e)    \
               and dateOk(e)   \
               and _regionOk(e)
-  loop
-    egn = getRandomNumbers()
-    return egn if ok(egn)
+  if (pattern == '')
+    loop
+      egn = getRandomNumbers()
+      return egn if ok(egn)
+  else
+    ps = [0 ... pattern.length].filter (i) -> pattern[i] == '?'
+    e = [0 ... pattern.length].filter (i) -> pattern[i] != '?'
+                              .map (i) -> Number(pattern[i])
+    loop
+      ns = getRandomNumbers(ps.length)
+      egn = fillAllPos(e, ns, ps)
+      return egn if ok(egn)
 

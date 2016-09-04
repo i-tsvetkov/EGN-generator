@@ -29,23 +29,60 @@ tryFixIt = function(egn, genFunc) {
   return filterEgns(genFunc(egn)).unique();
 };
 
-getRandomNumbers = function() {
-  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function() {
+getRandomNumbers = function(n) {
+  var j, results;
+  if (n == null) {
+    n = 10;
+  }
+  return (function() {
+    results = [];
+    for (var j = 1; 1 <= n ? j <= n : j >= n; 1 <= n ? j++ : j--){ results.push(j); }
+    return results;
+  }).apply(this).map(function() {
     return parseInt(Math.random() * 10);
   });
 };
 
-getRandomEgn = function() {
-  var _genderOk, _regionOk, egn, ok;
+getRandomEgn = function(pattern) {
+  var _genderOk, _regionOk, e, egn, j, k, ns, ok, ps, ref, ref1, results, results1;
+  if (pattern == null) {
+    pattern = '';
+  }
   _genderOk = genderOk(getGender());
   _regionOk = regionOk(getRegion());
   ok = function(e) {
     return _genderOk(e) && egnOk(e) && dateOk(e) && _regionOk(e);
   };
-  while (true) {
-    egn = getRandomNumbers();
-    if (ok(egn)) {
-      return egn;
+  if (pattern === '') {
+    while (true) {
+      egn = getRandomNumbers();
+      if (ok(egn)) {
+        return egn;
+      }
+    }
+  } else {
+    ps = (function() {
+      results = [];
+      for (var j = 0, ref = pattern.length; 0 <= ref ? j < ref : j > ref; 0 <= ref ? j++ : j--){ results.push(j); }
+      return results;
+    }).apply(this).filter(function(i) {
+      return pattern[i] === '?';
+    });
+    e = (function() {
+      results1 = [];
+      for (var k = 0, ref1 = pattern.length; 0 <= ref1 ? k < ref1 : k > ref1; 0 <= ref1 ? k++ : k--){ results1.push(k); }
+      return results1;
+    }).apply(this).filter(function(i) {
+      return pattern[i] !== '?';
+    }).map(function(i) {
+      return Number(pattern[i]);
+    });
+    while (true) {
+      ns = getRandomNumbers(ps.length);
+      egn = fillAllPos(e, ns, ps);
+      if (ok(egn)) {
+        return egn;
+      }
     }
   }
 };
