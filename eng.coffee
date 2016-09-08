@@ -28,16 +28,21 @@ getRandomEgn = (pattern = '') ->
               and egnOk(e)    \
               and dateOk(e)   \
               and _regionOk(e)
-  if (pattern == '')
+  if _.isString(pattern)
+    if (pattern == '')
+      loop
+        egn = getRandomNumbers()
+        return egn if ok(egn)
+    else
+      ps = [0 ... pattern.length].filter (i) -> pattern[i] == '?'
+      e = [0 ... pattern.length].filter (i) -> pattern[i] != '?'
+                                .map (i) -> Number(pattern[i])
+      loop
+        ns = getRandomNumbers(ps.length)
+        egn = fillAllPos(e, ns, ps)
+        return egn if ok(egn)
+  if _.isRegExp(pattern)
     loop
       egn = getRandomNumbers()
-      return egn if ok(egn)
-  else
-    ps = [0 ... pattern.length].filter (i) -> pattern[i] == '?'
-    e = [0 ... pattern.length].filter (i) -> pattern[i] != '?'
-                              .map (i) -> Number(pattern[i])
-    loop
-      ns = getRandomNumbers(ps.length)
-      egn = fillAllPos(e, ns, ps)
-      return egn if ok(egn)
+      return egn if ok(egn) and pattern.test(egn.join(''))
 

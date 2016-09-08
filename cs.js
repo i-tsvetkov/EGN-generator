@@ -53,34 +53,44 @@ getRandomEgn = function(pattern) {
   ok = function(e) {
     return _genderOk(e) && egnOk(e) && dateOk(e) && _regionOk(e);
   };
-  if (pattern === '') {
-    while (true) {
-      egn = getRandomNumbers();
-      if (ok(egn)) {
-        return egn;
+  if (_.isString(pattern)) {
+    if (pattern === '') {
+      while (true) {
+        egn = getRandomNumbers();
+        if (ok(egn)) {
+          return egn;
+        }
+      }
+    } else {
+      ps = (function() {
+        results = [];
+        for (var j = 0, ref = pattern.length; 0 <= ref ? j < ref : j > ref; 0 <= ref ? j++ : j--){ results.push(j); }
+        return results;
+      }).apply(this).filter(function(i) {
+        return pattern[i] === '?';
+      });
+      e = (function() {
+        results1 = [];
+        for (var k = 0, ref1 = pattern.length; 0 <= ref1 ? k < ref1 : k > ref1; 0 <= ref1 ? k++ : k--){ results1.push(k); }
+        return results1;
+      }).apply(this).filter(function(i) {
+        return pattern[i] !== '?';
+      }).map(function(i) {
+        return Number(pattern[i]);
+      });
+      while (true) {
+        ns = getRandomNumbers(ps.length);
+        egn = fillAllPos(e, ns, ps);
+        if (ok(egn)) {
+          return egn;
+        }
       }
     }
-  } else {
-    ps = (function() {
-      results = [];
-      for (var j = 0, ref = pattern.length; 0 <= ref ? j < ref : j > ref; 0 <= ref ? j++ : j--){ results.push(j); }
-      return results;
-    }).apply(this).filter(function(i) {
-      return pattern[i] === '?';
-    });
-    e = (function() {
-      results1 = [];
-      for (var k = 0, ref1 = pattern.length; 0 <= ref1 ? k < ref1 : k > ref1; 0 <= ref1 ? k++ : k--){ results1.push(k); }
-      return results1;
-    }).apply(this).filter(function(i) {
-      return pattern[i] !== '?';
-    }).map(function(i) {
-      return Number(pattern[i]);
-    });
+  }
+  if (_.isRegExp(pattern)) {
     while (true) {
-      ns = getRandomNumbers(ps.length);
-      egn = fillAllPos(e, ns, ps);
-      if (ok(egn)) {
+      egn = getRandomNumbers();
+      if (ok(egn) && pattern.test(egn.join(''))) {
         return egn;
       }
     }
