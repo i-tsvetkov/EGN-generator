@@ -21,6 +21,43 @@ tryFixIt = (egn, genFunc) ->
 getRandomNumbers = (n = 10) ->
   [1..n].map -> parseInt(Math.random() * 10)
 
+generateRandomStarPattern = (pattern) ->
+  return pattern unless pattern.match(/\*/)
+  l = 10 - pattern.replace(/\*/g, '').replace(/\[\d+-(\d+)\]/g, "$1").length
+  s = pattern.match(/\*/g).length
+  randomSum = (n, len) ->
+    if len == 1
+      [n]
+    else
+      x = _.sample(_.range(n))
+      [x].concat randomSum(n - x, len - 1)
+  ns = getRandomNumbers(l)
+  ps = randomSum(l, s)
+  gs = ps.map (i) ->
+    result = []
+    _.times i, -> result.push ns.shift()
+    result.join('')
+  result = pattern
+  gs.forEach (g) ->
+    result = result.replace('*', g)
+  result
+
+generateRandomRangePattern = (pattern) ->
+  return pattern unless pattern.match(/\[\d+-\d+\]/)
+  rs = pattern.match(/\[\d+-\d+\]/g).map (r) -> [r, parseRange r]
+  result = pattern
+  rs.forEach (it) ->
+    result = result.replace(it[0], _.sample(it[1]))
+  result
+
+generateRandomPattern = (pattern) ->
+  return pattern unless pattern.match(/\?/)
+  ps = [0 ... pattern.length].filter (i) -> pattern[i] == '?'
+  e  = [0 ... pattern.length].filter (i) -> pattern[i] != '?'
+                             .map (i) -> Number(pattern[i])
+  ns  = getRandomNumbers(ps.length)
+  fillAllPos(e, ns, ps).join('')
+
 getRandomEgn = (pattern = '') ->
   _genderOk = genderOk(getGender())
   _regionOk = regionOk(getRegion())
@@ -34,13 +71,12 @@ getRandomEgn = (pattern = '') ->
         egn = getRandomNumbers()
         return egn if ok(egn)
     else
-      ps = [0 ... pattern.length].filter (i) -> pattern[i] == '?'
-      e = [0 ... pattern.length].filter (i) -> pattern[i] != '?'
-                                .map (i) -> Number(pattern[i])
       loop
-        ns = getRandomNumbers(ps.length)
-        egn = fillAllPos(e, ns, ps)
+        egn = parseEgn generateRandomPattern \
+                       generateRandomRangePattern \
+                       generateRandomStarPattern pattern
         return egn if ok(egn)
+
   if _.isRegExp(pattern)
     loop
       egn = getRandomNumbers()
