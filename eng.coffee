@@ -4,11 +4,11 @@ getEgnsFromModel = (model) ->
       findEgnsWithPattern p
     else if p.match /^\d+$/
       findEgns parseEgn p
-  if model.match /^(\[\d+-\d+\]|[\d\?\*])*\*(\[\d+-\d+\]|[\d\?\*])*$/
+  if model.match /^(\[.+?\]|[\d\?\*])*\*(\[.+?\]|[\d\?\*])*$/
     starPattern(model).flatMap (p) ->
       getEgnsFromModel p
     .unique()
-  else if model.match /^[\d\?]*\[\d+-\d+\][\d\?]*$/
+  else if model.match /^[\d\?]*\[.+?\][\d\?]*$/
     getPatternsFromRangeModel(model).flatMap (p) ->
       getEngs p
     .unique()
@@ -23,7 +23,7 @@ getRandomNumbers = (n = 10) ->
 
 generateRandomStarPattern = (pattern) ->
   return pattern unless pattern.match(/\*/)
-  l = 10 - pattern.replace(/\*/g, '').replace(/\[\d+-(\d+)\]/g, "$1").length
+  l = 10 - getPatternLength(pattern)
   s = pattern.match(/\*/g).length
   randomSum = (n, len) ->
     if len == 1
@@ -43,8 +43,8 @@ generateRandomStarPattern = (pattern) ->
   result
 
 generateRandomRangePattern = (pattern) ->
-  return pattern unless pattern.match(/\[\d+-\d+\]/)
-  rs = pattern.match(/\[\d+-\d+\]/g).map (r) -> [r, parseRange r]
+  return pattern unless pattern.match(/\[.+?\]/)
+  rs = pattern.match(/\[.+?\]/g).map (r) -> [r, parseRange r]
   result = pattern
   rs.forEach (it) ->
     result = result.replace(it[0], _.sample(it[1]))

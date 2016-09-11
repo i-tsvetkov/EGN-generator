@@ -1,6 +1,6 @@
 starPattern = (pattern) ->
   pattern = pattern.replace(/\*{2,}/g, '*')
-  l = 10 - pattern.replace(/\*/g, '').replace(/\[\d+-(\d+)\]/g, "$1").length
+  l = 10 - getPatternLength(pattern)
   return [] if l <= 0
   [fst, gs..., lst] = pattern.split('*')
   cartesian([0..9], l).flatMap (xs) ->
