@@ -54,7 +54,7 @@
     }).concat(combinations(xs, n));
   };
 
-  var parseEgn = (egn) => egn.split('').map(n => Number(n));
+  var parseEgn = (egn) => egn.split('').map(Number);
 
   var egnOk = (egn) => (_.reduce(
                         _.range(9)
@@ -118,7 +118,7 @@
 
   var findEgnsWithPattern = (egn) => {
     var ps  = _.filter(_.range(egn.length), i => egn[i] === '?');
-    var egn = _.filter(egn, i => i !== '?').map(n => Number(n));
+    var egn = _.filter(egn, i => i !== '?').map(Number);
     if (egn.length + ps.length === 10)
       return _.uniq(filterEgns(cartesian(digits, ps.length)
               .map(nums => fillAllPos(egn, nums, ps)))

@@ -21,13 +21,13 @@ getPatternLength = (pattern) ->
 
 parseRange = (range) ->
   if range.match /\[\d+(,\d+)+\]/
-    ns = range.match(/\d+/g).map (n) -> Number(n)
+    ns = range.match(/\d+/g).map Number
     len = Math.max(ns...).toString().length
     ns.map (n) ->
       str = n.toString()
       '0'.repeat(len - str.length) + str
   else
-    [start, end, step] = range.match(/\d+/g).map (n) -> Number(n)
+    [start, end, step] = range.match(/\d+/g).map Number
     step ?= 1
     len = Math.max(start, end).toString().length
     _.range(start, end + 1, step).map (n) ->

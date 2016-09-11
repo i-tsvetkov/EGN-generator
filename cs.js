@@ -187,9 +187,7 @@ getPatternLength = function(pattern) {
 parseRange = function(range) {
   var end, len, ns, ref, start, step;
   if (range.match(/\[\d+(,\d+)+\]/)) {
-    ns = range.match(/\d+/g).map(function(n) {
-      return Number(n);
-    });
+    ns = range.match(/\d+/g).map(Number);
     len = Math.max.apply(Math, ns).toString().length;
     return ns.map(function(n) {
       var str;
@@ -197,9 +195,7 @@ parseRange = function(range) {
       return '0'.repeat(len - str.length) + str;
     });
   } else {
-    ref = range.match(/\d+/g).map(function(n) {
-      return Number(n);
-    }), start = ref[0], end = ref[1], step = ref[2];
+    ref = range.match(/\d+/g).map(Number), start = ref[0], end = ref[1], step = ref[2];
     if (step == null) {
       step = 1;
     }
