@@ -156,6 +156,7 @@
       }
 
       tbl.tBodies[0].textContent = tbl.tHead.textContent = '';
+      tbl.tBodies[0].className = 'tbody-scroll';
 
       if (_.contains(egn.value, '?'))
         showResults(findEgnsWithPattern(egn.value));
