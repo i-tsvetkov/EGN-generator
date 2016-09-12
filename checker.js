@@ -145,6 +145,8 @@
     egn = document.getElementById("egn");
     tbl = document.getElementById("egns");
 
+    document.querySelector('form').onsubmit = () => { btn.click(); return false; };
+
     btn.onclick = () => {
       egn.setCustomValidity("");
 
