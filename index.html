@@ -5,6 +5,7 @@
     <title>ЕГН Генератор</title>
     <link rel="icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" href="pure-min.css">
+    <link rel="stylesheet" href="noUiSlider.8.5.1/nouislider.min.css">
     <style>
       body {
         min-height: 100vh;
@@ -37,6 +38,22 @@
         display: block;
         overflow: auto;
       }
+
+      #age {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      #age-slider {
+        width: 100%;
+        margin: 4px 0 19px 0;
+      }
+
+      #age-slider .noUi-connect {
+        background: #0078e7;
+      }
     </style>
   </head>
   <body>
@@ -44,6 +61,7 @@
   <script src="moment.min.js"></script>
   <script src="checker.js"></script>
   <script src="cs.js"></script>
+  <script src="noUiSlider.8.5.1/nouislider.min.js"></script>
   <center>
   <form class="pure-form">
     <input id="egn" type="text" maxlength="10" pattern="[0-9?]*" placeholder="ЕГН" autofocus>
@@ -85,6 +103,10 @@
       <option value="Друг/Неизвестен">Друг/Неизвестен</option>
     </select>
     <button id="btn" class="pure-button pure-button-primary">Намери!</button>
+    <div id="age">
+      <label>Възраст</label>
+      <div id="age-slider"></div>
+    </div>
     <table id="egns" class="pure-table">
       <thead></thead>
       <tbody></tbody>

@@ -1,4 +1,5 @@
-  var btn, egn, tbl;
+  var btn, egn, tbl, slider;
+  const MAX_AGE = 130;
   var digits = _.range(10);
   var regions = {
     "Благоевград"       : {"min":"000", "max":"043"},
@@ -77,7 +78,18 @@
       return (egn) => true;
   };
 
-  var dateOk = (egn) => {
+  var ageOk = (ageRange) => {
+    var lowerLimit = ageRange[0];
+    var upperLimit = ageRange[1];
+    return (date) => {
+      var years = Math.floor(
+                    moment.duration(
+                      moment().endOf('day').diff(date)).asYears());
+      return lowerLimit <= years && years <= upperLimit;
+    };
+  };
+
+  var dateOk = (ageOk) => (egn) => {
     var y = 10 * egn[0] + egn[1],
         m = 10 * egn[2] + egn[3],
         d = 10 * egn[4] + egn[5];
@@ -85,8 +97,7 @@
     m -= (egn[2] > 3) ?   40 : (egn[2] > 1) ?   20 :    0;
     var date = moment([y, m - 1, d]);
     return date.isValid()
-        && date.isBefore()
-        && date.isAfter(moment().subtract(130, 'y'));
+        && ageOk(date);
   };
 
   var fillPos = (arr, item, n) => _.take(arr, n)
@@ -106,7 +117,7 @@
     egns
     .filter(genderOk(getGender()))
     .filter(egnOk)
-    .filter(dateOk)
+    .filter(dateOk(ageOk(getAgeRange())))
     .filter(regionOk(getRegion()));
 
   var findEgns = (egn) =>
@@ -139,11 +150,30 @@
 
   var getGender = () => document.getElementById("gender").value;
   var getRegion = () => document.getElementById("region").value;
+  var getAgeRange = () => slider.noUiSlider.get().map(n =>
+                            parseInt(
+                              slider.noUiSlider.options.format.from(n)
+                            ));
 
   window.onload = () => {
     btn = document.getElementById("btn");
     egn = document.getElementById("egn");
     tbl = document.getElementById("egns");
+    slider = document.getElementById('age-slider');
+    noUiSlider.create(slider, {
+      start: [0, MAX_AGE],
+      connect: true,
+      tooltips: true,
+      format: {
+        to:   (v) => parseInt(v).toString() + '\u00A0г.',
+        from: (v) => v.replace(/\u00A0г\.$/, '')
+      },
+      step: 1,
+      range: {
+        min: 0,
+        max: MAX_AGE
+      }
+    });
 
     document.querySelector('form').onsubmit = () => { btn.click(); return false; };
 
