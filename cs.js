@@ -117,14 +117,15 @@ generateRandomPattern = function(pattern) {
 };
 
 getRandomEgn = function(pattern) {
-  var _genderOk, _regionOk, egn, ok;
+  var _dateOk, _genderOk, _regionOk, egn, ok;
   if (pattern == null) {
     pattern = '';
   }
   _genderOk = genderOk(getGender());
   _regionOk = regionOk(getRegion());
+  _dateOk = dateOk(ageOk(getAgeRange()));
   ok = function(e) {
-    return _genderOk(e) && egnOk(e) && dateOk(e) && _regionOk(e);
+    return _genderOk(e) && egnOk(e) && _dateOk(e) && _regionOk(e);
   };
   if (_.isString(pattern)) {
     if (pattern === '') {

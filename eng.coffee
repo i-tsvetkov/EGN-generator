@@ -61,9 +61,10 @@ generateRandomPattern = (pattern) ->
 getRandomEgn = (pattern = '') ->
   _genderOk = genderOk(getGender())
   _regionOk = regionOk(getRegion())
+  _dateOk = dateOk(ageOk(getAgeRange()))
   ok = (e) -> _genderOk(e)    \
               and egnOk(e)    \
-              and dateOk(e)   \
+              and _dateOk(e)  \
               and _regionOk(e)
   if _.isString(pattern)
     if (pattern == '')
