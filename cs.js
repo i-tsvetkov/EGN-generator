@@ -197,7 +197,7 @@ getOptimalPattern = function() {
     }).apply(this).map(function(y) {
       return modulo(y, 100);
     }).unique();
-    if (minYear - maxYear >= 99) {
+    if (maxYear - minYear >= 99) {
       years = '??';
     } else {
       years = "[" + (years.join(',')) + "]";

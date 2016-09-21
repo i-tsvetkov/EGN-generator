@@ -31,7 +31,7 @@ getOptimalPattern = ->
 
     years = [minYear..maxYear].map((y) -> y %% 100).unique()
 
-    if minYear - maxYear >= 99
+    if maxYear - minYear >= 99
       years = '??'
     else
       years = "[#{years.join(',')}]"
