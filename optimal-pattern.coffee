@@ -1,3 +1,81 @@
+getOptimalPatternGenerator = ->
+  [minAge, maxAge] = getAgeRange()
+  minYear = moment().year() - maxAge - 1
+  maxYear = moment().year() - minAge
+
+  years = [minYear..maxYear]
+  months = [1..12]
+
+  regions = getPatternsFromRangeModel \
+              getOptimalRegionPattern().replace(/\?/g, '[0-9]')
+
+  addToMonth = (y, m) ->
+    switch
+      when y < 1900
+        m + 20
+      when y >= 2000
+        m + 40
+      else
+        m
+
+  getDays = (month) ->
+    switch month
+      when 2
+        [1..29]
+      when 1, 3, 5, 7, 8, 10, 12
+        [1..31]
+      when 4, 6, 9, 11
+        [1..30]
+
+  computeLastDigit = (e) ->
+    [0...9].map (i) -> e[i] * 2 ** (i + 1) % 11
+           .reduce((sum, n) -> sum + n) % 11 % 10
+
+  pad = (n, s) ->
+    l = n.toString().length
+    '0'.repeat(s - l) + n.toString()
+
+  return (->
+    for y in years
+      eYY = pad(y % 100, 2)
+      for m in months
+        eMM = pad(addToMonth(y, m), 2)
+        for d in getDays(m)
+          if m == 2 and d == 29 and y % 4 != 0
+            continue
+          eDD = pad(d, 2)
+          for r in regions
+            e = eYY + eMM + eDD + r
+            e += computeLastDigit e
+            yield e
+    return)()
+
+getOptimalRegionPattern = ->
+  gender = getGender()
+  region = getRegion()
+
+  if region == '?'
+    switch gender
+      when 'M'
+        return "??[0-8,2]"
+      when 'F'
+        return "??[1-9,2]"
+      when '?'
+        return "???"
+
+  min = regions[region].min
+  max = regions[region].max
+
+  switch gender
+    when 'M'
+      return "[#{min}-#{max},2]"
+    when 'F'
+      n = Number(min[2]) + 1
+      min = min.replace(/.$/, n)
+      return "[#{min}-#{max},2]"
+    when '?'
+      return "[#{min}-#{max}]"
+
 getOptimalPattern = ->
   getOptimalDatePattern = ->
     [minAge, maxAge] = getAgeRange()
@@ -38,32 +116,5 @@ getOptimalPattern = ->
 
     return "#{years}[#{months.join(',')}][1-31]"
 
-  getOptimalRegionPattern = ->
-    gender = getGender()
-    region = getRegion()
-
-    if region == '?'
-      switch gender
-        when 'M'
-          return "??[0-8,2]"
-        when 'F'
-          return "??[1-9,2]"
-        when '?'
-          return "???"
-
-    min = regions[region].min
-    max = regions[region].max
-
-    switch gender
-      when 'M'
-        return "[#{min}-#{max},2]"
-      when 'F'
-        n = Number(min[2]) + 1
-        min = min.replace(/.$/, n)
-        return "[#{min}-#{max},2]"
-      when '?'
-        return "[#{min}-#{max}]"
-
   return "#{getOptimalDatePattern()}#{getOptimalRegionPattern()}?"
-
 

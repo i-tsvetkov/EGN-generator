@@ -41,7 +41,9 @@ getPatternsFromRangeModel = (model) ->
       parseRange g
     else
       [g]
-  product(groups).map (x) -> x.join('')
+  product(groups).map (x) -> if (x.join)
+                               x.join('')
+                             else x
 
 
 
