@@ -29,11 +29,14 @@ getOptimalPattern = ->
     if maxYear >= 2000
       months = months.concat [41..52]
 
-    yearsPattern = if maxYear - minYear >= 99
-                     '??'
-                   else
-                     [minYear..maxYear].map((y) -> y %% 100).unique().join(',')
-    return "[#{yearsPattern}][#{months.join(',')}][1-31]"
+    years = [minYear..maxYear].map((y) -> y %% 100).unique()
+
+    if minYear - maxYear >= 99
+      years = '??'
+    else
+      years = "[#{years.join(',')}]"
+
+    return "#{years}[#{months.join(',')}][1-31]"
 
   getOptimalRegionPattern = ->
     gender = getGender()

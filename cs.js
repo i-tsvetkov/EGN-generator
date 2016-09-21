@@ -158,7 +158,7 @@ getRandomEgn = function(pattern) {
 getOptimalPattern = function() {
   var getOptimalDatePattern, getOptimalRegionPattern;
   getOptimalDatePattern = function() {
-    var century, getCentury, j, maxAge, maxYear, minAge, minYear, months, ref, results, yearsPattern;
+    var century, getCentury, j, maxAge, maxYear, minAge, minYear, months, ref, results, years, yearsPattern;
     ref = getAgeRange(), minAge = ref[0], maxAge = ref[1];
     minYear = moment().year() - maxAge - 1;
     maxYear = moment().year() - minAge;
@@ -190,14 +190,19 @@ getOptimalPattern = function() {
     if (maxYear >= 2000) {
       months = months.concat([41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52]);
     }
-    yearsPattern = maxYear - minYear >= 99 ? '??' : (function() {
+    years = (function() {
       results = [];
       for (var j = minYear; minYear <= maxYear ? j <= maxYear : j >= maxYear; minYear <= maxYear ? j++ : j--){ results.push(j); }
       return results;
     }).apply(this).map(function(y) {
       return modulo(y, 100);
-    }).unique().join(',');
-    return "[" + yearsPattern + "][" + (months.join(',')) + "][1-31]";
+    }).unique();
+    if (minYear - maxYear >= 99) {
+      years = '??';
+    } else {
+      years = "[" + (years.join(',')) + "]";
+    }
+    return years + "[" + (months.join(',')) + "][1-31]";
   };
   getOptimalRegionPattern = function() {
     var gender, max, min, n, region;
