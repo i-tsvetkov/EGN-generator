@@ -35,12 +35,22 @@ getOptimalPatternGenerator = ->
     l = n.toString().length
     '0'.repeat(s - l) + n.toString()
 
+  currentMonth = -> moment().month() + 1
+
   return (->
     for y in years
       eYY = pad(y % 100, 2)
       for m in months
+        if y == minYear and m < currentMonth()
+          continue
+        if y == maxYear and m > currentMonth()
+          break
         eMM = pad(addToMonth(y, m), 2)
         for d in getDays(m)
+          if y == minYear and m == currentMonth() and d <= moment().date()
+            continue
+          if y == maxYear and m == currentMonth() and d >  moment().date()
+            break
           if m == 2 and d == 29 and y % 4 != 0
             continue
           eDD = pad(d, 2)

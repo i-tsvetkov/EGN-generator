@@ -156,7 +156,7 @@ getRandomEgn = function(pattern) {
 };
 
 getOptimalPatternGenerator = function() {
-  var addToMonth, computeLastDigit, getDays, j, maxAge, maxYear, minAge, minYear, months, pad, ref, regions, results, years;
+  var addToMonth, computeLastDigit, currentMonth, getDays, j, maxAge, maxYear, minAge, minYear, months, pad, ref, regions, results, years;
   ref = getAgeRange(), minAge = ref[0], maxAge = ref[1];
   minYear = moment().year() - maxAge - 1;
   maxYear = moment().year() - minAge;
@@ -221,6 +221,9 @@ getOptimalPatternGenerator = function() {
     l = n.toString().length;
     return '0'.repeat(s - l) + n.toString();
   };
+  currentMonth = function() {
+    return moment().month() + 1;
+  };
   return (function*() {
     var d, e, eDD, eMM, eYY, k, len1, len2, len3, len4, m, o, q, r, ref1, t, y;
     for (k = 0, len1 = years.length; k < len1; k++) {
@@ -228,10 +231,22 @@ getOptimalPatternGenerator = function() {
       eYY = pad(y % 100, 2);
       for (o = 0, len2 = months.length; o < len2; o++) {
         m = months[o];
+        if (y === minYear && m < currentMonth()) {
+          continue;
+        }
+        if (y === maxYear && m > currentMonth()) {
+          break;
+        }
         eMM = pad(addToMonth(y, m), 2);
         ref1 = getDays(m);
         for (q = 0, len3 = ref1.length; q < len3; q++) {
           d = ref1[q];
+          if (y === minYear && m === currentMonth() && d <= moment().date()) {
+            continue;
+          }
+          if (y === maxYear && m === currentMonth() && d > moment().date()) {
+            break;
+          }
           if (m === 2 && d === 29 && y % 4 !== 0) {
             continue;
           }
