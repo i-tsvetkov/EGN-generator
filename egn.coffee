@@ -4,7 +4,10 @@ getEgnsFromModel = (model) ->
       findEgnsWithPattern p
     else if p.match /^\d+$/
       findEgns parseEgn p
-  if model.match /^(\[.+?\]|[\d\?\*])*\*(\[.+?\]|[\d\?\*])*$/
+  if model.match /\([^()]+?\)/
+    getOrPatterns(model).flatMap (p) ->
+      getEgnsFromModel p
+  else if model.match /^(\[.+?\]|[\d\?\*])*\*(\[.+?\]|[\d\?\*])*$/
     starPattern(model).flatMap (p) ->
       getEgnsFromModel p
     .unique()
