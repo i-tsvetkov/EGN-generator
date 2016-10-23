@@ -1,5 +1,5 @@
 getEgnsFromModel = (model) ->
-  getEngs = (p) ->
+  getEgns = (p) ->
     if p.match /^[\d\?]*\?[\d\?]*$/
       findEgnsWithPattern p
     else if p.match /^\d+$/
@@ -13,10 +13,10 @@ getEgnsFromModel = (model) ->
     .unique()
   else if model.match /^[\d\?]*\[.+?\][\d\?]*$/
     getPatternsFromRangeModel(model).flatMap (p) ->
-      getEngs p
+      getEgns p
     .unique()
   else
-    getEngs model
+    getEgns model
 
 tryFixIt = (egn, genFunc) ->
   filterEgns(genFunc(egn)).unique()
