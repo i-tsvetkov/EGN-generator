@@ -21,6 +21,9 @@ getEgnsFromModel = (model) ->
 tryFixIt = (egn, genFunc) ->
   filterEgns(genFunc(egn)).unique()
 
+numberOfEgns = (nYears) ->
+  nYears * 365 * 1000 + (nYears // 4) * 1 * 1000
+
 getRandomNumbers = (n = 10) ->
   [1..n].map -> parseInt(Math.random() * 10)
 
