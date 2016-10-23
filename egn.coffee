@@ -24,6 +24,9 @@ tryFixIt = (egn, genFunc) ->
 getRandomNumbers = (n = 10) ->
   [1..n].map -> parseInt(Math.random() * 10)
 
+generateRandomOrPattern = (pattern) ->
+  _.sample(getOrPatterns(pattern))
+
 generateRandomStarPattern = (pattern) ->
   return pattern unless pattern.match(/\*/)
   l = 10 - getPatternLength(pattern)
@@ -78,7 +81,8 @@ getRandomEgn = (pattern = '') ->
       loop
         egn = parseEgn generateRandomPattern \
                        generateRandomRangePattern \
-                       generateRandomStarPattern pattern
+                       generateRandomStarPattern \
+                       generateRandomOrPattern pattern
         return egn if ok(egn)
 
   if _.isRegExp(pattern)
