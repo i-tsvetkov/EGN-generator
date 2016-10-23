@@ -106,30 +106,19 @@ getOptimalPattern = ->
           months = '[41-52]'
       return "#{yearsPattern}#{months}[1-31]"
 
-    months = []
+    switch
+      when minYear < 1900 and 1900 <= maxYear < 2000
+        yymm = "([#{minYear % 100}-99][21-32]" \
+             + "|[00-#{maxYear % 100}][01-12])"
+      when minYear < 1900 and 2000 <= maxYear
+        yymm = "([#{minYear % 100}-99][21-32]" \
+             + "|[00-99][01-12]" \
+             + "|[00-#{maxYear % 100}][41-52])"
+      when 1900 <= minYear < 2000 and 2000 <= maxYear
+        yymm = "([#{minYear % 100}-99][01-12]" \
+             + "|[00-#{maxYear % 100}][41-52])"
 
-    if minYear < 2000 or 1900 <= maxYear
-      months.push '[1-12]'
-
-    if minYear < 1900
-      months.push '[21-32]'
-
-    if maxYear >= 2000
-      months.push '[41-52]'
-
-    years = [minYear..maxYear].map((y) -> y %% 100).unique()
-
-    if maxYear - minYear >= 99
-      years = '??'
-    else
-      years = "[#{years.join(',')}]"
-
-    if months.length > 1
-      months = "(#{months.join('|')})"
-    else
-      months = months[0]
-
-    return "#{years}#{months}[1-31]"
+    return "#{yymm}[1-31]"
 
   return "#{getOptimalDatePattern()}#{getOptimalRegionPattern()}?"
 
