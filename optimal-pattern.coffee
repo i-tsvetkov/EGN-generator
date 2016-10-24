@@ -31,10 +31,6 @@ getOptimalPatternGenerator = ->
     [0...9].map (i) -> e[i] * 2 ** (i + 1) % 11
            .reduce((sum, n) -> sum + n) % 11 % 10
 
-  pad = (n, s) ->
-    l = n.toString().length
-    '0'.repeat(s - l) + n.toString()
-
   currentMonth = -> moment().month() + 1
 
   return (->
@@ -86,6 +82,10 @@ getOptimalRegionPattern = ->
     when '?'
       return "[#{min}-#{max}]"
 
+pad = (n, s = 2) ->
+  l = n.toString().length
+  '0'.repeat(s - l) + n.toString()
+
 getOptimalPattern = ->
   getOptimalDatePattern = ->
     [minAge, maxAge] = getAgeRange()
@@ -95,7 +95,7 @@ getOptimalPattern = ->
     getCentury = (year) -> year // 100
 
     if getCentury(minYear) == getCentury(maxYear)
-      yearsPattern = "[#{minYear %% 100}-#{maxYear %% 100}]"
+      yearsPattern = "[#{pad(minYear %% 100)}-#{pad(maxYear %% 100)}]"
       century = getCentury(maxYear)
       switch century
         when 18
