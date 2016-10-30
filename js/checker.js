@@ -190,10 +190,10 @@
       tbl.tBodies[0].textContent = tbl.tHead.textContent = '';
       tbl.tBodies[0].className = 'tbody-scroll';
 
-      if (_.contains(egn.value, '?'))
-        showResults(findEgnsWithPattern(egn.value));
-      else
-        showResults(findEgns(parseEgn(egn.value)));
+      if (egn.value.length === 0)
+        egn.value = getOptimalPattern();
+
+      showResults(getEgnsFromModel(egn.value));
 
       tbl.tHead.insertRow().insertCell().textContent = 'Намерени са '
                                                         + (tbl.rows.length - 1)
